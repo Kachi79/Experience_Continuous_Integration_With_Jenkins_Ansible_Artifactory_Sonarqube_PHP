@@ -224,3 +224,45 @@ pipeline {
 ![](./img/13.running-ansible-2.png)
 #
 
+## CI/CD PIPELINE FOR TODO APPLICATION
+#
+Our goal here is to deploy the Todo application onto servers directly from Artifactory rather than from git.
+
+- Updated Ansible with an Artifactory role. Install aartifactory role from the Ansible galaxy repository. 
+
+- Now, open your web browser and type the URL https://. You will be redirected to the Jfrog Atrifactory page. Enter default username and password: admin/password. Once in create username and password and create your new repository. (Take note of the reopsitory name)
+
+On our jenkins server, install git and then pull our php-todo application into our server
+```
+https://github.com/darey-devops/php-todo.git
+```
+Installing PHP and other packages
+
+```
+yum module reset php -y
+yum module enable php:remi-7.4 -y
+yum install -y php php-common php-mbstring php-opcache php-intl php-xml php-gd php-curl php-mysqlnd php-fpm php-json
+systemctl start php-fpm
+systemctl enable php-fpm
+```
+![](./img/14.php_install.png)
+
+On the Jenkins-Ansible server, install the 
+PLOT PLUGIN and ARTIFACTORY PLUGIN and set it up.
+Add the artifactory server IP to the JFROG global configuration
+![](./img/15.plugin.png)
+
+Run the jenkinsfile to trigger ansible playbook to setup artifactory on the artifactory server
+![](img/16.artifactory_run.png)
+
+Open port in artifactory security group
+
+![](img/17.artifactory_port.png)
+
+![](img/18.test_succes.png)
+![](img/18.artif_success.png)
+
+Create a GENERIC Repository called SHALLOM. This will be used to store our build artifacts
+![](img/21.repo_create.png)
+#
+
